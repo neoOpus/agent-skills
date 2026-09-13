@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "organization": "Anoir Ben Tanfous",
+  "date": "September 2026",
+  "abstract": "Prompt-to-queue intake and priority brain for AI coding agents. Every incoming prompt becomes a todolist entry instead of immediate work; entries are re-ranked continuously by priority, obsolescence, and dependency; execution happens only on an explicit GO. Quality-gated with lessons extracted to a shared cross-harness lessons file that is periodically promoted back into the skill's own rules.",
+  "references": [
+    "https://agentskills.io/"
+  ]
+}
