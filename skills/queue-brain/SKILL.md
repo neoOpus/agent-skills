@@ -123,6 +123,12 @@ reread `lessons.md` and promote recurring patterns into this SKILL.md's rules
 (edit the file — that is the skill adjusting itself). Delete lessons that no
 longer generalize.
 
+**Publish trigger:** when the working set in `lessons.md` grows past 10
+entries, suggest publishing the skill so the shared brain reaches other
+machines: `node ~/.agents/skills/queue-brain/publish-queue-brain.mjs`. One
+line, non-blocking ("10 lessons accumulated — publish?"), and only once per
+crossing (note the last count suggested at; reset after a publish).
+
 ## Instruments (decision aids to reach for)
 
 Prefer cheap instruments before guessing, in ascending cost:
