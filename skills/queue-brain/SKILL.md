@@ -1,17 +1,26 @@
 ---
 name: queue-brain
 description: >
-  Prompt-to-queue intake and priority brain. Every incoming prompt becomes a
-  todolist entry instead of immediate work; entries are re-ranked continuously
-  by priority, obsolescence, and dependency; execution happens only on an
-  explicit GO (or when the list is declared autonomous). Emphasizes final
-  quality over speed, retains lessons between entries, and periodically
-  rewrites its own rules from what worked. Works in any project and any agent
-  harness (Codebuff, Claude Code, Cursor, Codex, etc.). Use for /queue-brain,
-  "queue mode", "brain queue", or when the user wants prompts collected and
-  organized before any work starts.
+  Turn scattered prompts into a prioritized task queue instead of instant,
+  interruption-driven work. Every incoming request becomes a todolist entry;
+  entries are deduplicated, re-ranked by value, cost, staleness, and dependency
+  after each change, and executed one at a time only when the user says GO (or
+  switches to autonomous mode). Built for users who fire many prompts in a row
+  and want nothing started, half-finished, or forgotten: batch request intake,
+  backlog management, deferred execution, "wait for my GO", "don't start yet,
+  just queue it", "add this to the list and reorganize". Includes a persistent
+  lessons file that captures what worked across sessions and periodically
+  rewrites its own ranking rules from that history. Works in any project and
+  any coding agent harness (Codebuff, Claude Code, Cursor, Codex, Gemini).
+  Use when the user says /queue-brain, "queue mode", "brain queue", "backlog
+  mode", or wants prompts collected, prioritized, and organized first.
 argument-hint: "[on|off|go|auto|review]"
 license: MIT
+metadata:
+  author: neoOpus
+  version: "1.1.0"
+  repository: https://github.com/neoOpus/agent-skills
+  homepage: https://www.skills.sh/neoopus/agent-skills/queue-brain
 ---
 
 # Queue Brain
