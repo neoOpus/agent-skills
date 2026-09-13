@@ -59,12 +59,28 @@ Modes:
    - `#timed` — meaningful only near a deadline; note the deadline in the entry
    - `#risky` — irreversible, production-touching, or destructive
    - `#quick` — under ~5 minutes
-2. **DEDUPE.** Before adding, scan the list. Exact duplicate → merge, keep the
-   sharper wording. Overlapping → merge into one entry; the list carries the
-   union of intent. If the new prompt *corrects* an existing entry, rewrite that
-   entry and note the correction. Tell the user what merged (one line).
-3. **RE-RANK.** Full list re-ordered every turn. Score = value × confidence
-   ÷ (cost + staleness-decay). Concrete signals, in order:
+   Real sessions show two drift modes the tags must capture: **phrases that
+   imply timing but are not deadlines** ("check tomorrow", "in a few hours",
+   "verify in an hour") are `#timed` — they rot fast and must NOT sit ranked
+   above live work; and **duplicates arrive as rephrasings** ("make it faster"
+   twice in different words) — dedupe by intent, not wording.
+2. **DEDUPE — against the list AND against reality.** Textual pass first:
+   exact duplicate → merge, keep the sharper wording; overlapping → merge into
+   one entry carrying the union of intent; a prompt that *corrects* an entry
+   rewrites it and notes the correction. Then the reality pass, because the
+   dominant real-world drift is work that is ALREADY DONE masquerading as
+   backlog (one real session: 13+ of 47 entries shipped, none merged as
+   duplicates): before ranking an entry, ask "is the outcome already true?"
+   Cheap signal: the entry describes a symptom the current surface already
+   answers. If plausible, verify through the surface ONCE and close the entry
+   as DONE-verified with the proof in one line — never delete silently. When
+   the list grows past ~20 entries or a session starts cold, stop trusting it:
+   run one batched verify-then-close sweep over the whole list before any new
+   work. Tell the user what merged and what closed (one line each).
+3. **RE-RANK.** Full list re-ordered every turn. Rank primarily by the
+   concrete signals below, in order — the value/cost formula is a tiebreaker
+   intuition, not a computation (scores were never real numbers; pretending
+   otherwise is theater):
    - **Blocking:** what do 2+ other entries depend on? Those rise.
    - **Red/siren state:** an active failure (red card, failing check, data loss
      risk) outranks every feature.
@@ -81,10 +97,13 @@ Modes:
    found here becomes the new top entry. (Cheap insurance; catches cascade
    breakage early.)
 5. **EXECUTE (only on go/auto).** Top entry only. Before starting: re-read the
-   relevant files — the list may be older than the code. After finishing:
-   state what was verified and how (command/output, not vibes), then loop back
-   to step 2. **One entry per turn by default** — finishing is better than
-   starting; an unfinished entry carries a `WIP:` note with exact resume point.
+   relevant files — the list may be older than the code (that staleness is why
+   DEDUPE has a reality pass). After finishing: state what was verified and how
+   (command/output, not vibes), then loop back to step 2. **One entry per turn
+   by default** — finishing is better than starting; an unfinished entry
+   carries a `WIP:` note with exact resume point. A cluster of small entries
+   on one surface may share a turn IF each still gets its own verification;
+   "GO on Tier 0 (all three)" style commands are one turn by explicit request.
 6. **REPORT.** Terse: what moved, what merged, what's next, what's blocked.
    No essays. The list is the interface.
 
