@@ -7,7 +7,7 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 
 ## Working set
 
-<!-- publish trigger: last suggested at 0 · reset after running publish-queue-brain.mjs -->
+<!-- publish trigger: last suggested at 99 · reset after running publish-queue-brain.mjs -->
 
 - 2026-09-13 · all · SESSION START: re-read ~/.agents/skills/queue-brain/lessons.md before the first re-rank — cross-harness lessons only load if the file is actually read (SKILL.md rule added 09-13 after the junction setup made sharing possible but not automatic)
 - 2026-09-13 · all · DEDUPE-BY-REALITY BEATS DEDUPE-BY-TEXT: the queue's dominant corruption is not rephrased duplicates but work ALREADY DONE sitting as backlog — SKILL.md now mandates a reality pass ('is the outcome already true?') before ranking, plus a batched verify-then-close sweep at 20+ entries or cold session start [PROMOTED 09-13 → DEDUPE rule]
