@@ -1,8 +1,5 @@
 # queue-brain
 
-[![skills.sh](https://img.shields.io/badge/registry-skills.sh-black)](https://www.skills.sh/neoopus/agent-skills/queue-brain)
-[![Agent Skills](https://img.shields.io/badge/install-npx%20skills%20add%20neoOpus%2Fagent--skills%40queue--brain-blue)](#install)
-
 Prompt-to-queue intake and priority brain for AI coding agents.
 
 Every incoming prompt becomes a todolist entry instead of immediate work;
@@ -18,10 +15,8 @@ Gemini/Antigravity, Cursor, Codex.
 ## Install
 
 ```bash
-npx skills add neoOpus/agent-skills@queue-brain -g
+npx skills add anwarbt/skills@queue-brain -g
 ```
-
-Listed on the [skills.sh registry](https://www.skills.sh/neoopus/agent-skills/queue-brain).
 
 Or manually: copy the `queue-brain/` directory into your harness's skills
 directory (`~/.agents/skills/`, `~/.claude/skills/`, `~/.gemini/skills/`,
