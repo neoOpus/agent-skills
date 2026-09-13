@@ -16,6 +16,7 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 - 2026-09-13 · sider-clone · PREVIEW = REAL SURFACE: the live preview console caught a fresh fmtH-out-of-scope bug (the exact class the new sweep hunts) within one poll; verification through the served page beats node --check, every time
 - 2026-09-13 · sider-clone · FLAPY CHECKS RESOLVE ON RETRY: self-check FAIL timeouts on backend/daemon were mid-cycle transients; rerun twice before treating as red — recorded as rule: 'transient FAIL = retry before investigation'
 - 2026-09-13 · sider-clone · PROCEDURE AT POINT-OF-RISK: clear-traps runbook procedure condensed into the button tooltip (4 steps, evidence-first) — docs nobody opens at 3am are dead docs; attach the safe path to the dangerous control
+- 2026-09-13 · sider-clone · TTL-THEN-BLOCK IS A LATENCY BOMB: any cache that makes the FIRST requester after expiry eat a full recompute turns slow data into timeout storms under load (measured: /api/state p95 3-4s vs 2.5s probe budget = nightly false FAILs). Pattern: stale-while-revalidate — serve stale instantly, refresh in background, promise-dedupe concurrent refreshers. CLASS RULE: grep siblings for `Date.now() - X.at > TTL` + await-recompute shape and fix them all; measure the p95, not the average. SWEPT 09-13: gateway catalog (fixed, same SWR), unlock-cache (248B, block cost trivial), prettyCache (first-requester parse, bounded) — remaining instances cheap by measurement, left alone
 
 ## Promotion log
 
