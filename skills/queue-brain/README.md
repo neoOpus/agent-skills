@@ -1,7 +1,7 @@
 # queue-brain
 
-[![Install with Skills CLI](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.skills.sh%2Fapi%2Fsearch%3Fq%3Dqueue-brain&query=%24.skills%5B%3F(%40.id%3D%3D'neoopus%2Fagent-skills%2Fqueue-brain')%5D.installs&label=skills.sh%20installs&suffix=%20installs&color=blue)](https://www.skills.sh/neoopus/agent-skills/queue-brain)
 [![skills.sh](https://img.shields.io/badge/registry-skills.sh-black)](https://www.skills.sh/neoopus/agent-skills/queue-brain)
+[![Agent Skills](https://img.shields.io/badge/install-npx%20skills%20add%20neoOpus%2Fagent--skills%40queue--brain-blue)](#install)
 
 Prompt-to-queue intake and priority brain for AI coding agents.
 
