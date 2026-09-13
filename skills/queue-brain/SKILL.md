@@ -111,13 +111,18 @@ Modes:
 
 An entry is DONE only when:
 
-- [ ] It was verified through the real surface (ran it, clicked it, curled it) —
-      code that merely *looks* right is not done.
+- [ ] It was verified through the real surface (ran it, clicked it, curled it,
+      or watched the live preview console) — code that merely *looks* right
+      is not done. Rendered-page verification beats syntax checks: a scope
+      bug that parses clean still crashes the DOM.
 - [ ] Non-trivial logic left one runnable check (assert-style lab test, or a
       documented manual repro).
 - [ ] Root cause addressed, not the reported symptom — grep the callers before
       patching one site.
 - [ ] No regression in neighboring behavior that shares the touched surface.
+- [ ] A new CHECK whose failure mode is silence (an analyzer, a monitor, a
+      regression gate) ships with a POSITIVE CONTROL: inject the bug it hunts
+      into a copy, watch it catch, delete. An unproven 'clean' is unverified.
 - [ ] A lesson was extracted if anything surprising happened (see below).
 
 Quality beats throughput: if done-right needs a refactor the entry didn't
@@ -160,6 +165,10 @@ Prefer cheap instruments before guessing, in ascending cost:
    DOM or logs and *watch* the flapping happen before fixing it.
 5. **Baseline-then-change** — capture current numbers (rates, gaps, counts)
    before any optimization so the payoff is provable later.
+6. **Transient-FAIL triage** — an infra check (timeout class) that fails once
+   under concurrent load is retried before it is investigated; two clean
+   reruns downgrade it to noise, a repeat failure makes it real. AVOIDS:
+   chasing ghosts while the real red state hides behind them.
 
 ## Harness portability
 
