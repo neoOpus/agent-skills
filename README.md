@@ -6,6 +6,24 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Available Skills
 
+### queue-brain
+
+[![skills.sh](https://img.shields.io/badge/registry-skills.sh-black)](https://www.skills.sh/neoopus/agent-skills/queue-brain)
+
+Prompt-to-queue intake and priority brain. Every incoming prompt becomes a todolist entry instead of immediate work; entries are re-ranked continuously by priority, obsolescence, and dependency; execution happens only on an explicit `GO` (or autonomous mode). Quality-gated with a persistent lessons file that improves the skill's own ranking rules over time. Works in any agent harness.
+
+**Use when:**
+- Firing many prompts in a row and wanting nothing started half-finished
+- "Wait for my GO" / "don't start yet, just queue it" workflows
+- Backlog management with continuous re-prioritization
+
+**Install:**
+```bash
+npx skills add neoOpus/agent-skills@queue-brain -g
+```
+
+**Details:** [skills/queue-brain](skills/queue-brain/) · [skills.sh listing](https://www.skills.sh/neoopus/agent-skills/queue-brain)
+
 ### react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
@@ -81,8 +99,16 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 
 ## Installation
 
+Install all skills at once:
+
 ```bash
-npx add-skill vercel-labs/agent-skills
+npx skills add neoOpus/agent-skills
+```
+
+Or a single skill:
+
+```bash
+npx skills add neoOpus/agent-skills@<skill-name> -g
 ```
 
 ## Usage
