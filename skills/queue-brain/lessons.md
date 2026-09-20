@@ -7,7 +7,7 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 
 ## Working set
 
-<!-- publish trigger: last suggested at 18 · reset after running publish-queue-brain.mjs -->
+<!-- publish trigger: last suggested at 31 · reset after running publish-queue-brain.mjs -->
 
 - 2026-09-13 · all · SESSION START: re-read ~/.agents/skills/queue-brain/lessons.md before the first re-rank — cross-harness lessons only load if the file is actually read (SKILL.md rule added 09-13 after the junction setup made sharing possible but not automatic)
 - 2026-09-13 · all · DEDUPE-BY-REALITY BEATS DEDUPE-BY-TEXT: the queue's dominant corruption is not rephrased duplicates but work ALREADY DONE sitting as backlog — SKILL.md now mandates a reality pass ('is the outcome already true?') before ranking, plus a batched verify-then-close sweep at 20+ entries or cold session start [PROMOTED 09-13 → DEDUPE rule]
@@ -265,6 +265,9 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 - Personal lesson, cost real time: a `Date.now()` captured inside a `try` but used in the `catch` throws `ReferenceError` on a path that only a loaded machine reaches — idle runs all pass. Anything that only runs when the box is busy is untestable by accident; give it a deterministic knob (env-forced 1ms budgets) and a scratch output path so the control cannot pollute the real log.
 - Deterministic control knobs beat waiting for a busy night: SELF_CHECK_PROBE_MS / SELF_CHECK_GATE_MS = 1 exercise every overrun branch in seconds, and running it twice proves the escalation. Exclude any gate whose own control cases must see a real FAIL from the blunt sweep.
 - [2026-09-19] A heal probe must re-verify through the real surface, never trust the launcher's exit 0: the nightly's guardian heal "succeeded" while the wrapper it started had died in milliseconds (adoptive wrapper owns no child; unref'd timer is not a handle). A process that daemonizes needs spawnDetached, not runLauncher — waiting on a never-exiting service can never report a repair.
+
+## 2026-09-20 — the stall axis, duplicate guardians, and fixture replay
+
 - A PROGRESS METRIC THAT INCLUDES A RETRY/CHURN POOL IS NOT A PROGRESS METRIC. `overnight-run.mjs` tested `workLeft = pending + failed + needsRounds`, so a pass that claimed 21 modules and failed them read as "no progress" (FATAL) while a module merely moving failed->poisoned reset the stall counter — the same reshuffle decided both ways. Fix: measure the axis only work can move (pending + needsRounds), and say what the driver reported in the FATAL. Class: any "is it advancing?" signal built by summing buckets a retry loop writes to.
 - WHEN A TRAP'S OWN FIXTURE CLAIMS "THE OLD RULE WAS WRONG", DRIVE **BOTH** RULES OVER THE RECORDED PASSES. The stall lab replays four real windows; the pre-fix rule must reproduce every logged trap (matching the logged modules-left number and second proves the transcription), and the fix must fire only where the queue was genuinely frozen. A fixture whose old rule does NOT reproduce the historical failure proves nothing.
 - RECORDED TOTALS ARE THE CHEAPEST WAY TO IDENTIFY WHICH DEFINITION A PROCESS WAS RUNNING. Every logged modules-left number equalled pending + failed exactly, which is how we learned `needsRounds` contributed 0 and that the retry pool was the entire disagreement — no code archaeology needed.
