@@ -153,6 +153,16 @@ machines: `node ~/.agents/skills/queue-brain/publish-queue-brain.mjs`. One
 line, non-blocking ("10 lessons accumulated — publish?"), and only once per
 crossing (note the last count suggested at; reset after a publish).
 
+**AUTOMATED CHECK — runs itself, do not rely on memory.** The trigger's history
+is a warning relied on session memory and never fired: the marker sat at 137
+while the file grew to 173. A checker now does the comparison mechanically:
+`node ~/.agents/skills/queue-brain/publish-trigger.mjs` compares the live
+working-set count against the marker and prints the one-line publish prompt at
+each new 10-entry crossing (moving the marker itself, so one crossing warns
+exactly once; a publish resets it). Run it at session start, right after the
+lessons re-read — if it prints the line, surface it to the user verbatim and
+move on; silence means nothing to do. Selftest: `--selftest`.
+
 ## Instruments (decision aids to reach for)
 
 Prefer cheap instruments before guessing, in ascending cost:
