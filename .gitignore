@@ -1,1 +1,5 @@
 .DS_Store
+
+# Python bytecode artifacts — machine-local
+__pycache__/
+*.pyc
