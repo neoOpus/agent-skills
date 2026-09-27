@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "name": "skill-supermind-realistic-heldout",
+  "description": "Held-out domain queries with human-style graded relevance judgments.",
+  "cases": [
+    {
+      "id": "software-react-waterfalls",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Our React page loads slowly because data requests start too late; review waterfalls and bundle size.",
+      "judgments": {"react-best-practices": 3, "web-design-guidelines": 1, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "software-accessibility",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Review this checkout for keyboard focus, screen-reader labels, and accessible interaction states.",
+      "judgments": {"web-design-guidelines": 3, "react-best-practices": 1, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "software-next-rendering",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Improve Next.js rendering performance and reduce unnecessary client-side JavaScript.",
+      "judgments": {"react-best-practices": 3, "web-design-guidelines": 0, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "delivery-preview",
+      "domain": "delivery",
+      "split": "heldout",
+      "query": "Create a Vercel preview deployment for this application and give me the claimable URL.",
+      "judgments": {"vercel-deploy-claimable": 3, "react-best-practices": 0, "web-design-guidelines": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "delivery-explicit-production",
+      "domain": "delivery",
+      "split": "heldout",
+      "query": "Deploy the current app to production on Vercel and return the live URL.",
+      "judgments": {"vercel-deploy-claimable": 3, "skill-supermind": 1, "react-best-practices": 0, "web-design-guidelines": 0, "queue-brain": 0}
+    },
+    {
+      "id": "learning-queue",
+      "domain": "learning",
+      "split": "heldout",
+      "query": "Save these requests in a priority queue, wait for my GO, then execute them in order.",
+      "judgments": {"queue-brain": 3, "skill-supermind": 1, "react-best-practices": 0, "web-design-guidelines": 0, "vercel-deploy-claimable": 0}
+    },
+    {
+      "id": "learning-skill-catalog",
+      "domain": "learning",
+      "split": "heldout",
+      "query": "Find an existing skill before writing a new one and connect it to related capabilities.",
+      "judgments": {"skill-supermind": 3, "queue-brain": 0, "react-best-practices": 0, "web-design-guidelines": 0, "vercel-deploy-claimable": 0}
+    },
+    {
+      "id": "design-contrast",
+      "domain": "design",
+      "split": "heldout",
+      "query": "Audit the interface for visual polish, UX consistency, and accessibility guidance before release.",
+      "judgments": {"web-design-guidelines": 3, "react-best-practices": 1, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "negative-weather",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "What is the weather in Paris next Tuesday?",
+      "judgments": {"react-best-practices": 0, "web-design-guidelines": 0, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "negative-personal-note",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "Write a short reflective note about my morning walk.",
+      "judgments": {"react-best-practices": 0, "web-design-guidelines": 0, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    },
+    {
+      "id": "negative-factual",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "What is the capital of France?",
+      "judgments": {"react-best-practices": 0, "web-design-guidelines": 0, "vercel-deploy-claimable": 0, "queue-brain": 0, "skill-supermind": 0}
+    }
+  ]
+}

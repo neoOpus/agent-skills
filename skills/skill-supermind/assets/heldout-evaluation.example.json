@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "name": "skill-supermind-realistic-heldout-evaluation",
+  "description": "Held-out product, delivery, learning, and no-trigger queries with graded labels and repeated-query groups.",
+  "cases": [
+    {
+      "id": "software-performance-01",
+      "group_id": "software-performance",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Our React product page loads slowly because requests start late; review waterfalls and bundle size.",
+      "judgments": {
+        "react-best-practices": 3,
+        "web-design-guidelines": 1,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "software-performance-02",
+      "group_id": "software-performance",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Find unnecessary client-side JavaScript and delayed data fetching in a Next.js screen.",
+      "judgments": {
+        "react-best-practices": 3,
+        "web-design-guidelines": 1,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "software-performance-03",
+      "group_id": "software-performance",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Make this React checkout faster by removing render waterfalls and oversized bundles.",
+      "judgments": {
+        "react-best-practices": 3,
+        "web-design-guidelines": 1,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "software-accessibility-01",
+      "group_id": "software-accessibility",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Review this checkout for keyboard focus, screen-reader labels, and accessible interaction states.",
+      "judgments": {
+        "web-design-guidelines": 3,
+        "react-best-practices": 1,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "software-accessibility-02",
+      "group_id": "software-accessibility",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Audit a React form for focus order, accessible names, and visible keyboard states.",
+      "judgments": {
+        "web-design-guidelines": 3,
+        "react-best-practices": 1,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "software-accessibility-03",
+      "group_id": "software-accessibility",
+      "domain": "software",
+      "split": "heldout",
+      "query": "Check the interface before release for screen-reader clarity and accessible interaction feedback.",
+      "judgments": {
+        "web-design-guidelines": 3,
+        "react-best-practices": 1,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "delivery-preview-01",
+      "group_id": "delivery-preview",
+      "domain": "delivery",
+      "split": "heldout",
+      "query": "Create a Vercel preview deployment for this application and return the claimable URL.",
+      "judgments": {
+        "vercel-deploy-claimable": 3,
+        "skill-supermind": 1,
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "queue-brain": 0
+      }
+    },
+    {
+      "id": "delivery-preview-02",
+      "group_id": "delivery-preview",
+      "domain": "delivery",
+      "split": "heldout",
+      "query": "Publish a shareable preview of the current app on Vercel for design review.",
+      "judgments": {
+        "vercel-deploy-claimable": 3,
+        "skill-supermind": 1,
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "queue-brain": 0
+      }
+    },
+    {
+      "id": "delivery-preview-03",
+      "group_id": "delivery-preview",
+      "domain": "delivery",
+      "split": "heldout",
+      "query": "I need a Vercel preview URL for the branch so a teammate can test the latest UI.",
+      "judgments": {
+        "vercel-deploy-claimable": 3,
+        "skill-supermind": 1,
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "queue-brain": 0
+      }
+    },
+    {
+      "id": "learning-queue-01",
+      "group_id": "learning-queue",
+      "domain": "learning",
+      "split": "heldout",
+      "query": "Save these requests in a priority queue, wait for my GO, then execute them in order.",
+      "judgments": {
+        "queue-brain": 3,
+        "skill-supermind": 1,
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0
+      }
+    },
+    {
+      "id": "learning-queue-02",
+      "group_id": "learning-queue",
+      "domain": "learning",
+      "split": "heldout",
+      "query": "Hold these prompts until I explicitly approve them, then run the highest-priority task first.",
+      "judgments": {
+        "queue-brain": 3,
+        "skill-supermind": 1,
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0
+      }
+    },
+    {
+      "id": "learning-queue-03",
+      "group_id": "learning-queue",
+      "domain": "learning",
+      "split": "heldout",
+      "query": "Queue the follow-up work, preserve its order, and do not start without my GO signal.",
+      "judgments": {
+        "queue-brain": 3,
+        "skill-supermind": 1,
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0
+      }
+    },
+    {
+      "id": "no-trigger-weather",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "What is the weather in Paris next Tuesday?",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-reflection",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "Write a short reflective note about my morning walk.",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-factual",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "What is the capital of France?",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-keyword-bait",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "React Vercel queue deployment performance in one sentence",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-product-name",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "Vercel is a company name mentioned in this note",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-ui-bait",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "The interface has a button, label, focus state, and preview image",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-deployment-near-miss",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "What does the deployment term mean in this glossary?",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    },
+    {
+      "id": "no-trigger-queue-near-miss",
+      "group_id": "no-trigger-controls",
+      "domain": "no-trigger",
+      "split": "heldout",
+      "query": "What is a priority queue in computer science?",
+      "judgments": {
+        "react-best-practices": 0,
+        "web-design-guidelines": 0,
+        "vercel-deploy-claimable": 0,
+        "queue-brain": 0,
+        "skill-supermind": 0
+      }
+    }
+  ]
+}

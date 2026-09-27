@@ -1,0 +1,41 @@
+[
+  {
+    "id": "react-performance",
+    "query": "Review a React component for waterfalls and bundle size.",
+    "expected": ["react-best-practices"],
+    "forbidden": ["vercel-deploy-claimable"]
+  },
+  {
+    "id": "interface-accessibility",
+    "query": "Audit keyboard focus, labels, and accessibility of this web interface.",
+    "expected": ["web-design-guidelines"],
+    "forbidden": ["vercel-deploy-claimable"]
+  },
+  {
+    "id": "deferred-work",
+    "query": "Collect these prompts in a priority queue and wait for my GO.",
+    "expected": ["queue-brain"]
+  },
+  {
+    "id": "skill-routing",
+    "query": "Index a large catalog of skills and connect them with typed graph relationships.",
+    "expected": ["skill-supermind"]
+  },
+  {
+    "id": "deployment",
+    "query": "Deploy the current application to Vercel and return the preview URL.",
+    "expected": ["vercel-deploy-claimable"],
+    "forbidden": ["queue-brain"]
+  },
+  {
+    "id": "negative-poem",
+    "query": "Write a short poem about rain on a metal roof.",
+    "expected": [],
+    "forbidden": ["vercel-deploy-claimable", "queue-brain"]
+  },
+  {
+    "id": "negative-factual",
+    "query": "What is the capital of France?",
+    "expected": []
+  }
+]

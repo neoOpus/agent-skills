@@ -1,0 +1,30 @@
+[
+  {
+    "id": "heldout-react-performance",
+    "query": "Review a React component for waterfalls and bundle size.",
+    "expected": ["react-best-practices"],
+    "forbidden": ["queue-brain"]
+  },
+  {
+    "id": "heldout-accessibility",
+    "query": "Audit keyboard focus and labels in this interface.",
+    "expected": ["web-design-guidelines"],
+    "forbidden": ["vercel-deploy-claimable"]
+  },
+  {
+    "id": "heldout-deployment",
+    "query": "Deploy the current application to Vercel and return the preview URL.",
+    "expected": ["vercel-deploy-claimable"],
+    "forbidden": ["queue-brain"]
+  },
+  {
+    "id": "heldout-no-trigger-fact",
+    "query": "What is the capital of France?",
+    "expected": []
+  },
+  {
+    "id": "heldout-no-trigger-writing",
+    "query": "Write a short poem about rain on a metal roof.",
+    "expected": []
+  }
+]

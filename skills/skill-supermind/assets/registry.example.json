@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {
+      "id": "skill-supermind",
+      "domain": "knowledge-management",
+      "confidence": 1.0,
+      "relations": [
+        {"type": "composes", "target": "queue-brain", "weight": 0.8, "note": "Queue first, then route and execute selected skills."},
+        {"type": "composes", "target": "react-best-practices", "weight": 0.7, "note": "Use when a routed task needs React performance guidance."},
+        {"type": "composes", "target": "web-design-guidelines", "weight": 0.7, "note": "Use when a routed task needs interface compliance review."},
+        {"type": "composes", "target": "vercel-deploy-claimable", "weight": 0.5, "note": "Use only when deployment is explicitly requested and authorized."}
+      ]
+    },
+    {
+      "id": "queue-brain",
+      "domain": "knowledge-management",
+      "confidence": 1.0,
+      "relations": [
+        {"type": "related-to", "target": "skill-supermind", "weight": 0.8, "note": "Shared persistent-learning pattern, different responsibility."}
+      ]
+    },
+    {
+      "id": "react-best-practices",
+      "domain": "software",
+      "confidence": 1.0,
+      "relations": [
+        {"type": "alternative-to", "target": "web-design-guidelines", "weight": 0.3, "note": "Different review surfaces: performance versus interface compliance."}
+      ]
+    },
+    {
+      "id": "web-design-guidelines",
+      "domain": "software",
+      "confidence": 1.0,
+      "relations": [
+        {"type": "validates", "target": "react-best-practices", "weight": 0.3, "note": "Can complement performance review with interface/accessibility checks."}
+      ]
+    },
+    {
+      "id": "vercel-deploy-claimable",
+      "domain": "delivery",
+      "confidence": 1.0,
+      "relations": [
+        {"type": "related-to", "target": "react-best-practices", "weight": 0.2, "note": "Deployment is a delivery action; performance review is an implementation practice."}
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ argument-hint: <file-or-pattern>
 
 # Web Interface Guidelines
 
+#software #web #accessibility #user-experience #interface-design
+
 Review files for compliance with Web Interface Guidelines.
 
 ## How It Works

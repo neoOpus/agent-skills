@@ -24,6 +24,18 @@ npx skills add neoOpus/agent-skills@queue-brain -g
 
 **Details:** [skills/queue-brain](skills/queue-brain/) · [skills.sh listing](https://www.skills.sh/neoopus/agent-skills/queue-brain)
 
+### skill-supermind
+
+A skills-of-skills control plane for standards-compatible validation, SQLite indexing, hashtag discovery, typed graph relationships, bounded routing, and evidence-driven improvement at large collection scale. Includes dependency-free tooling, regression tests, decision records, and a parallel human learning system.
+
+**Use when:**
+- Building a second brain or router for thousands of Agent Skills
+- Finding and composing existing skills before creating another
+- Maintaining hierarchical, tagged, dependency-aware skill collections
+- Turning repeated execution lessons into reviewed routing improvements
+
+**Details:** [skills/skill-supermind](skills/skill-supermind/)
+
 ### react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.

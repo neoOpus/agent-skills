@@ -1,9 +1,11 @@
 ---
-name: vercel-deploy
+name: vercel-deploy-claimable
 description: Deploy applications and websites to Vercel. Use this skill when the user requests deployment actions such as "Deploy my app", "Deploy this to production", "Create a preview deployment", "Deploy and give me the link", or "Push this live". No authentication required - returns preview URL and claimable deployment link.
 ---
 
 # Vercel Deploy
+
+#software #deployment #vercel #delivery #operations
 
 Deploy any project to Vercel instantly. No authentication required.
 
@@ -17,7 +19,7 @@ Deploy any project to Vercel instantly. No authentication required.
 ## Usage
 
 ```bash
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh [path]
+bash /mnt/skills/user/vercel-deploy-claimable/scripts/deploy.sh [path]
 ```
 
 **Arguments:**
@@ -27,13 +29,13 @@ bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh [path]
 
 ```bash
 # Deploy current directory
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh
+bash /mnt/skills/user/vercel-deploy-claimable/scripts/deploy.sh
 
 # Deploy specific project
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh /path/to/project
+bash /mnt/skills/user/vercel-deploy-claimable/scripts/deploy.sh /path/to/project
 
 # Deploy existing tarball
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh /path/to/project.tgz
+bash /mnt/skills/user/vercel-deploy-claimable/scripts/deploy.sh /path/to/project.tgz
 ```
 
 ## Output
