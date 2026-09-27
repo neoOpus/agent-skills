@@ -7,8 +7,9 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 
 ## Working set
 
-<!-- publish trigger: last suggested at 152 · reset after running publish-queue-brain.mjs -->
+<!-- publish trigger: last suggested at 186 · reset after running publish-queue-brain.mjs -->
 
+- 2026-09-23 · sider-clone · DRY-RUN MUST BE THE TOOL'S OWN MODE: queueSurgery always rewrote the queue, so a "I only counted" callback leaked its in-memory mutations to disk — added dryRun:true (full read+mutate+diff cycle, never writes queue or journal; proved byte-identical under deliberate dirtying). A dry-run simulated by a careful caller over an always-writing tool is a real run waiting for a careless callback.
 - 2026-09-13 · all · SESSION START: re-read ~/.agents/skills/queue-brain/lessons.md before the first re-rank — cross-harness lessons only load if the file is actually read (SKILL.md rule added 09-13 after the junction setup made sharing possible but not automatic)
 - 2026-09-13 · all · DEDUPE-BY-REALITY BEATS DEDUPE-BY-TEXT: the queue's dominant corruption is not rephrased duplicates but work ALREADY DONE sitting as backlog — SKILL.md now mandates a reality pass ('is the outcome already true?') before ranking, plus a batched verify-then-close sweep at 20+ entries or cold session start [PROMOTED 09-13 → DEDUPE rule]
 - 2026-09-13 · all · POSITIVE CONTROL: analyzer/check reporting 'clean' is unproven until it catches an injected bug — applies to any check whose failure mode is silence [PROMOTED 09-13 → Quality gate: positive-control checkbox]
@@ -25,8 +26,20 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 - 2026-09-17 · all · KNOB-FILE DOC AS THE GATE: documenting every _work/*.json with writer-reader pairs (grep-verified at write time) turns the knob-shipped-but-never-read class into a self-auditing table - a future knob file that cannot name its reader is not done; the doc IS the positive control.
 - 2026-09-17 · sider-clone · PORTABILITY RUN PAYOFF DATA: MetaMask (webpack chunks) drained ~120 modules/pass with zero infra FATALs after the 6 contract fixes — the portable pipeline now covers esbuild AND webpack bundle families (demethodify pre-transform was the unlock); future targets = fetch-crx → capture → deobfuscate.mjs, expect contract bugs only in new bundle formats.
 
+- 2026-09-27 · sider-clone · PIPED EXIT CODES LIE: `node gate --selftest | tail` measures tail's exit, not the suite's — a 1-FAIL selftest printed FAIL and reported exit 0. Verify selftest exits with the redirect pattern (`> log 2>&1; echo $?`), never through a pipe.
+- 2026-09-27 · sider-clone · A CONTROL PINNED TO THE LIVE TREE'S VERDICT INVERTS WHEN THE TREE HEALS: self-host's exit-1 subprocess control hardcoded main-only-audit as its subject, so the audit going clean made the control red on health. Fixture subjects (hermetic file whose own exit is pinned in the fixture) never rot. Recurred 2x more the same day — gate-suite's LIVE cross-check control pinned rate-degradation by name (fixed → inverted), and gate-telemetry's 1e6 modules/s floor had no contention headroom (pooled 500-module run measured 860k → red on health). Fix at the writer: hermetic fixtures, assert findings against the predicate, floors with measured headroom.
+
+- [2026-09-24] Before chasing measurement nondeterminism, measure the ENVIRONMENT's cadence: a capture pair that had been byte-identical for four runs flipped the moment an env restart introduced a per-minute watchdog sweep spawn cadence — the inputs were provably unchanged (`find -newermt` empty) and the variance localized to surfaces with async mock flows. And a gate whose retry keys on exit≠0 cannot see an exit-0 record that flipped its numbers — pair identity (or a numeric delta vs the previous record) is the retry condition for capture-class checks.
+- [2026-09-26] A FIXTURE SHRINK SILENTLY PRODUCES A DIFFERENT TEST UNLESS ITS DEFINING PROPERTY IS ASSERTED. module-count-drift's selftest spent 81-133s writing ~210,000 real module files to test a PURE function (`compareCounts` takes two count Maps — its own header says so). Moving the comparison controls onto Maps and cutting the disk fixtures to 1/10th scale gave 3.6-3.9s at 41/41. The trap: `WIDE(1688)` was "a mode change" only because every bundle moved, and at 1/10th scale that stopped being true by accident — so control 4 now ASSERTS that all 22 ratios sit outside the tolerance band, and the walk fixture asserts it is still 7-dead-of-22 with the median intact. Proof it kept its teeth: 5 mutations of a COPY (median discriminator removed, countModules stops excluding metadata, share guard removed, on-disk fixture shrunk to 11 dead, mode fixture with one bundle in band) each turned the suite red through the control that owns that bug — and the first harness run SKIPped a mutation whose anchor text had gone stale, reporting "stale, not passing" instead of counting it. (Re-transcribed verbatim from the session diff after the canonical was clobbered; see the 2026-09-27 sync-direction incident.)
+
+- [2026-09-27] A BLIND COPY ACROSS MIRRORS IS A DESTROYING WRITE: copying repo→canonical to "fix sync" clobbered tail lessons another lane had appended mid-session (recovered only via Freebuff HTTP-cache forensics; nothing lost in the end because 00-docs/LESSONS.md carried the same lessons). Every mirror sync must diff BOTH sides first and refuse on unexplained divergence — the sync script's own --overwrite guard exists for exactly this and was bypassed by a raw cp. When two ledgers can both receive writes, neither is canonical until a tool says so.
+- [2026-09-27] LOST FILE STATE LIVES IN THE APP'S HTTP CACHE: Freebuff's Cache_Data blobs retained recent file reads, session text and even a cached diff output; recovery = grep Cache_Data for ASCII anchors, then buffer-safe JSON-string termination (scan for unescaped quote, utf8-decode, JSON.parse) — byte-wise unescape mojibakes multibyte chars, and shell-quoted node -e mangles backslashes, so write the extractor as a file.
+- [2026-09-27] THE CARRIED ROOT-CAUSE IS A HYPOTHESIS: resuming a wall's 3 transient reds, the prior session's "DEGRADED banner → exit 1 by design" theory died in ten minutes of reading — the banner only prints on --apply (never in a selftest), the exit-1 path (checkExitCode) cannot count degraded skips, and solo runs under 8 load-spinners exited 0. Re-derive from the code before fixing the "mechanism"; only then spend the fix.
+- [2026-09-27] A CRASH VERDICT MUST CARRY THE CRASH'S WORDS: the wall reported "exit 1 with no FAIL line — a crash" for 3 gates with the children's stderr in hand and dropped, so diagnosis cost a re-run. classify() now extracts the Error/Exception line (not a trailing stack frame — first draft picked the frame and the new control caught it) into the detail. Symmetric rule: a child's test server sockets need error listeners (AGENTS day-one) — a socket reset without one is an uncaughtException AFTER the verdict printed, i.e. the exact exit-1-no-FAIL shape.
+
 ## Promotion log
 
+- 09-21 · 7 recurring working-set classes promoted to SKILL.md "Promoted rules": lying readouts (silent-zero / degrade-to-constant / count-the-things), right-layer positive controls, absent=skip, measured gate budgets, no sleep-polling, class-not-site + fix-at-the-writer, goal-ranking every suggestion (from the 09-16..09-21 working set).
 - 09-13 · DEDUPE reality pass + verify-then-close sweep → SKILL.md DEDUPE rule (from STALE-QUEUE DRIFT + DEDUPE-BY-REALITY)
 - 09-13 · Positive control for silent checks → SKILL.md Quality gate checkbox (from POSITIVE CONTROL)
 - 09-13 · Rendered-surface verification → SKILL.md Quality gate verification checkbox (from PREVIEW = REAL SURFACE)
@@ -288,3 +301,233 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 - IF THE PROOF HAS NOTHING TO COLOUR, THE ELEMENT THAT CARRIES THE TOKEN IS PART OF THE FIX. The stub surfaces' status line became an accent chip, because a thin shell with no accent-bearing element retints to a few percent of background tint — invisible at a glance. Say plainly which surfaces the proof still does NOT cover (here: the clone's own components, which do not consume the tokens yet) instead of letting one green pane stand for all twenty.
 - A NON-GLOBAL REGEX IN A `while ((m = RE.exec(s)))` LOOP SPINS FOREVER. A `/g` regex advances `lastIndex` per exec; without it, exec always returns the first match and the loop never ends — a class-checker hung twice on this before it ever scanned a live file. Rule for any regex-driven scanner: define exec-loop patterns with `/g` at the declaration site, and assert at least one selftest case exercises the loop's exit (a scanner that hangs in its own selftest is caught there, not in the nightly). Sibling sweep: every `while (RE.exec` in the repo must have a `/g` flag.
 - A CLASS-CHECK EARNS ITS KEEP ON ITS FIRST LIVE RUN. The verdict-hygiene scan was written to catch future machine-state verdicts — and immediately found two real hits in self-check.mjs itself (exit-0 SKIP lines rendered as `ok (...)`), the same file that would host its gate. Build the class check, then let it scan its own host file FIRST: the repo you are scanning includes the tool you scan with.
+- ALWAYS LAUNCH BACKGROUND/INTERNAL POWERSHELL HIDDEN, AND RE-AUDIT SCHEDULED TASKS PERIODICALLY. The user works interactively on this machine; any console-window spawn (plain `powershell -Command`, unshimmed schtasks action, `Start-Process` without `-WindowStyle Hidden`) pops a window and steals focus mid-work. Standing rule: every agent-initiated background/internal op goes through the hidden recipe (wscript + run-hidden.vbs for tasks, `-WindowStyle Hidden` for direct launches), and the periodic check for "any scheduled task not doing that" already exists as 60-tools' taskLaunchers + popupSpawns gates — green there means no popup class is regrowing. (2026-09-22, user preference rule.)
+- [2026-09-24] Before chasing measurement nondeterminism, measure the ENVIRONMENT's cadence: a capture pair that had been byte-identical for four runs flipped the moment an env restart introduced a per-minute watchdog sweep spawn cadence — the inputs were provably unchanged (`find -newermt` empty) and the variance localized to surfaces with async mock flows. And a gate whose retry keys on exit≠0 cannot see an exit-0 record that flipped its numbers — pair identity (or a numeric delta vs the previous record) is the retry condition for capture-class checks.
+
+- [2026-09-26] A FIXTURE SHRINK SILENTLY PRODUCES A DIFFERENT TEST UNLESS ITS DEFINING PROPERTY IS ASSERTED. module-count-drift's selftest spent 81-133s writing ~210,000 real module files to test a PURE function (`compareCounts` takes two count Maps — its own header says so). Moving the comparison controls onto Maps and cutting the disk fixtures to 1/10th scale gave 3.6-3.9s at 41/41. The trap: `WIDE(1688)` was "a mode change" only because every bundle moved, and at 1/10th scale that stopped being true by accident — so control 4 now ASSERTS that all 22 ratios sit outside the tolerance band, and the walk fixture asserts it is still 7-dead-of-22 with the median intact. Proof it kept its teeth: 5 mutations of a COPY (median discriminator removed, countModules stops excluding metadata, share guard removed, on-disk fixture shrunk to 11 dead, mode fixture with one bundle in band) each turned the suite red through the control that owns that bug — and the first harness run SKIPped a mutation whose anchor text had gone stale, reporting "stale, not passing" instead of counting it.
+
+- [2026-09-27] A CHECK WHOSE SAMPLES ARE WRITTEN BY ITS OWN TEST SUITE NEVER ARMS, AND EVERY CONTROL STAYS GREEN. The content gate's rate-degradation check had been reporting "only 0 comparable run(s) so far" on every live run: four `runGate` calls inside its own selftest inherited the default `rateFile`, so 132-module and 1655-module FIXTURE samples were evicting the 13,628-module live baseline from a twelve-slot window — and `baselineFor` matches module counts EXACTLY, so the live runs were never comparable. Every behavioural control passed, because every fixture run behaved exactly as specified; the defect was about WHERE the bytes landed, which no behaviour assertion can see. First fix was to digest both production files at the top of the suite and again at the end — and that fix is its own lesson: it went red the moment an unrelated live run touched either file during the suite, because a digest cannot tell WHO wrote the file. A control that cries wolf is a control people learn to skip. The durable form is a guard at the boundary (`MCG_FIXTURE_RUN=1` makes `runGate` REFUSE a run that has not named its own state files) plus a control that asserts the refusal, not a before/after observation. Generalise: any state a test writes must be structurally unreachable from production, and prove it by proving the refusal.
+
+- [2026-09-27] A READOUT MUST BE PINNED ON THE SHAPE THE CALLER BUILDS. `formatRateLine` read `v.run.ms` to print modules/s and had a passing control for it — but the control rendered what `judgeRate` RETURNS (which carries `run`), while the gate built its own summary object without it. Every live run therefore printed "rate ok — no rate" directly above a real measurement, and the file stayed green. Same shape as the dropped `modules` field: a field no control supplies is a field no control checks, and the symptom is a plausible line rather than an error. Two controls fixed it — one for the flat `{modules, ms}` shape the gate builds, one through the real printer in the gate's own suite — and the fix was proven by reverting the two fields and watching 109 become 108 with the literal text `rate DEGRADED — no rate`.
+
+- [2026-09-27] "NO MUTATION WENT RED" HAS EXACTLY TWO EXPLANATIONS: THE CONTROL IS VACUOUS, OR THE MUTATION NEVER EXECUTED. Both happened in one harness run. M1 folded the rate verdict into `exitCode: drifted.length ? 1 : 0` and the suite stayed green — because a CLEAN tree returns EARLY, three lines above, and never reached the mutated line. M5 gated `if (saved.ok) live.rate = rate` on the verdict, which only touches the REPORTED copy; the state file was written either way, so the invariant ("the window is written even on a skip") was never actually broken. Classify before concluding: read the mutant's own output, and when the suite is green ask which of the two it is. Also: assert the unmutated copy is green BEFORE mutating (the first version of this harness never did, so "the control turned red" could have meant "the copy was already broken"), match control labels with `includes` not `startsWith` (a claim in the middle of a sentence is not a vacuous control), and let a mutation assert `mustNotPass` when the expected failure is a LOUD crash rather than a FAIL line.
+
+- [2026-09-27] TWO ROOTS SHARING ONE PRUNED CACHE FILE TAKE TURNS EVICTING EACH OTHER, SO EVERY RUN READS COLD. The hash store prunes to the files the run actually saw (correct for a nightly: it bounds the store to the live tree). Point two different trees at one store and each run deletes the other's entries on save, so the cache hit rate is 0 forever and regime is permanently `cold` — which matters here because a baseline only matches within one regime, so the rate check skips every run and the cost line reports every module as freshly hashed. The live gate has exactly one root, which is why it never showed up in production. In a suite, one cache file per root, and one rate file for all fixture roots.
+
+- [2026-09-27] A HASH SIDECAR KEYED BY PATH + MTIME + SIZE IS A CORRECTNESS-SENSITIVE OPTIMISATION, NOT JUST A SPEEDUP. Measured on the 13,628-module corpus: `stat` 336ms warm against read+normalise+sha256 824ms warm; gate end-to-end 4.50s cold → 0.68-1.05s warm (0 hashed, 13,628 served from cache, 2.67MB store). `mtime + size` is a HEURISTIC, so it ships with two defences that a naive cache does not: a `NORMALISER_ID` fingerprint (edit the normaliser and the whole store is discarded, not merged — otherwise a weakened normaliser silently keeps answering the old question), and a canary that re-hashes every 64th hit and marks the store suspect on mismatch (212 re-hashed per run here). A suspect store is never trusted for gating and never written back with entries — the first version refused to write it at all, which meant the next run re-trusted the same lying store.
+
+- [2026-09-27] A `const` THE SELFTEST TOUCHES MUST BE DECLARED ABOVE THE `--selftest` DISPATCH — the TDZ trap, hit TWICE in one session. The `--selftest` branch runs the suite from the module body, so a `const` declared further down the file is still in its temporal dead zone when the suite asks for it: `ReferenceError: Cannot access 'X' before initialization`. First cost me `FIXTURE_RUN_ENV` in lib/rate-degradation.mjs, then `VERDICT_TAGS` in update-watch-check.mjs — and both times the failure was a CRASH, not a FAIL line, so a suite that "passes 111/111" one minute and dies the next is a suite whose green was never in doubt but whose structure is. The durable fix is to move the dispatch block to the very bottom of the file, after every declaration; the cheap fix is the hoist, and the hoist is not obvious enough to be worth rediscovering. Function DECLARATIONS hoist and are safe — only `const`/`let`/`class` bite.
+
+- [2026-09-27] A STATIC FINDER CAN BE RIGHT AND STILL NAME THE WRONG LINE — probe the crash, do not patch the finding. The main-only audit flagged `ratio.toFixed()` on two lines of lib/rate-degradation.mjs as an unguarded nullable format. That line cannot throw (`NaN.toFixed()` is the string `"NaN"`); the real crash was one line earlier, on `base.medianMs.toFixed(0)`, reachable only because `minSamples` is a CALLER-TUNABLE option, so `{minSamples: 0}` stepped past the early return and divided by a null baseline: `TypeError: Cannot read properties of null (reading 'toFixed')` — a crash with no verdict, which is the exact incident the integration guide's REGIME triage row exists for, reproduced inside the checker written to prevent that class. Two lessons: a tunability knob must not be able to switch an invariant off (the fix is a null-baseline contract, not a toFixed guard), and when a finder points at line N, run the thing and find the line that actually throws. Also worth knowing: the audit's nullable pass flagged a local `const ratio` only because the function RETURNS a `ratio` property that is null on skip paths — one identifier meaning two things in one function, so renaming the local (`ratioNow`) both silenced the false positive and removed the real shadowing hazard.
+
+- [2026-09-27] A CONTROL CAN CATCH ITS OWN FIXTURE, AND THAT IS THE POINT. Three times in one afternoon, a control went red on a bug in the code I had just written rather than in the code it was written for: `--limit=` (an unset shell variable expands to a blank flag, `Number('')` is 0, and `slice(-0)` is `slice(0)`, so the flag meaning "zero" printed the WHOLE ledger); a token column asserted with a thousands separator the code did not add; and a fixture built by calling the line RENDERER instead of constructing the row object, so the promotion line printed `undefined (registry undefined)`. Each was a real hole — the first two in the fix itself, the third in the control. The habit that catches all three: write the control against the SHAPE production passes, and read a red control's own detail string before assuming the production code is at fault. Corollary, now a standing rule in the files I own: a rendering function never emits the literal `undefined` — an unmapped tag, a missing version pair, or an absent number renders as a named condition instead.
+
+- [2026-09-27] `cmd | tail -2; echo "exit=$?"` REPORTS TAIL'S STATUS, NOT THE COMMAND'S. A sweep script built this way printed `exit=0` for a selftest that had actually crashed before printing its summary, which is how two suites were recorded as green in a log I then cited as evidence. Use `${PIPESTATUS[0]}` (and do not run an `async` selftest through a `node -e` that forgets to `await` — `Promise.ok` is `undefined`, so `r.ok ? 0 : 1` takes the failure branch for the wrong reason, or reads as green if the ternary is inverted). A sweep is a gate like any other: if it cannot fail, its green is decoration. This box has now produced three separate verification-method defects in a row, all of which pointed at the code instead of the method.
+
+- [2026-09-27] AN `unref()`'d TIMER PLUS A TOP-LEVEL AWAIT IS A SUITE THAT SILENTLY DOES NOTHING AND EXITS 0. Node prints "Detected unsettled top-level await" and ends the process with a success code, so every control in the file is skipped and the gate is green. It bit `watchdog.mjs` the moment its port-probe controls started awaiting a promise whose only pending work was the probe's own deliberately-unref'd timeout. The `unref()` is CORRECT (a port probe must never hold a process open) and the control's await is correct; the two are individually right and jointly a no-op. The fix is a ref'd keeper timer around the await, and the tell is the warning line in the output — so a selftest log containing that phrase means "0 controls ran", not "0 controls failed". Related, from the same edit: adding `export` to a function that lives INSIDE another function (`portBound` was nested in `main()`) is a SyntaxError at import, and the message names no file, because the failure surfaces while the importing module graph is being compiled.
+
+- [2026-09-27] A BOOLEAN THAT MERGES TWO OPPOSITES IS A BUG WAITING FOR ITS NEXT CALLER. `watchdog.mjs`'s `portBound()` returned `false` for ECONNREFUSED (definitive: nothing is listening) and for ETIMEDOUT (inconclusive: something IS listening and not accepting) alike. The launcher happened to consult netstat first, which bounded the damage to 464 wasted spawns instead of a night of them — but the workaround lived at the CALL SITE, so the next caller would have inherited the original defect with no comment to warn it. Fixed by carrying the reason in the return value (`{bound, how}`) rather than by fixing the one caller, and pinned with four controls over a fake socket so all four arms are reachable on a box where they are not. The general move: when a function's boolean is load-bearing for a safety decision, ask what the `false` actually MEANS, and if the honest answer is "two different things", return the reason instead.
+
+## A redirect you cannot read back is half a redirect, and the lying half is the one tests trust (2026-09-27)
+`lib/gate-telemetry.mjs` honoured `GATE_TELEMETRY_FILE` on the WRITE path only; `readTelemetry()`'s
+default parameter went straight to the production ledger. So a test that isolated its writes into a
+temp jsonl then read *production* rows. Nothing threw. My replica's "empty ledger is not a red card"
+case was silently checking whatever the nightly run had last appended — it failed on a day the
+pipeline had run and would have passed on a day it hadn't. The assertion's outcome depended on the
+machine's mood, which is the signature of a check that is not a check.
+
+Rule: **an isolation knob must cover every read and every write, or the tests that use it are
+measuring production.** When a default parameter is the thing that breaks the isolation, write the
+regression control against the *default* (`readTelemetry()` with no argument), not against an
+explicit path — an explicit path was never the bug.
+
+Second half of the same lesson, from the sibling fixture: a **fixture whose NAME decides the
+verdict** is not testing the thing it claims. My "gate is wired and reporting" case wrote a stub file
+called `already-wired.mjs` next to a ledger row for `module-content-gate`; the coverage half matches
+wired sources to rows by stripping `.mjs`, so the case was in fact exercising the *never-reported*
+path and passing for the wrong reason. Name the fixture after the identity the check compares on, or
+the case silently stops being the case you wrote.
+
+Third, cheap and generalisable: **rounding is not disagreement.** The real cost line prints
+`151,976 modules/s` and the row holds `151975.68`. Compare `Math.round(row)` on both sides or the
+check false-reds every single night and gets disabled by the second operator who sees it.
+
+## A gate that names a callee is a gate that will be wrong about the next callee (2026-09-27)
+`lab/import-guard/detector.mjs` decided "is this `--selftest` read actually launching a
+child?" from a NAME LIST — `spawnSync|spawn|execFileSync|execFile|execSync|fork|runNode`.
+So `lib/self-host.mjs:282`, which passes the flag to a child through its own
+`selfHostSubprocess({ …, args: ['--selftest'] })` helper, was reported as a leak
+indefinitely. Adding the wrapper name would have made the list wrong again the next
+time somebody wrote another wrapper.
+
+The replacement asks a question the callee's identity cannot answer: **what is the
+flag's syntactic ROLE?** Passing it puts it as an element of a list
+(`args: ['--selftest']`); testing it puts it as a call argument
+(`argv.includes('--selftest')`). Which bracket is open at the token tells them
+apart, and that holds for a wrapper nobody has written yet. No parser needed.
+
+**Then the gate caught my own rule being too permissive, which is the part worth
+remembering.** I also exempted any flag read inside a function body, reasoning that a
+function body does not execute at import. True — and useless, because a top-level
+`main()` call DOES execute at import, so `function main(){ if (argv.includes(...)) … }
+main();` leaks exactly as badly. The gate immediately reported two correctly-guarded
+files (`headroom-compress`, `headroom-probe`) as "stale baseline entry: is guarded
+now", which is what over-reach looks like from the outside.
+
+The fix that survived: **depth is necessary but not sufficient; the exemption also
+requires positive evidence that the file gates its entry point.** Both files do —
+they dispatch `main()` from a `pathToFileURL(process.argv[1])` guard at the *bottom*,
+which is why the evidence has to be a whole-file read and not a lookback window. Absent
+that evidence the finding stands.
+
+Two general rules:
+  1. **A structural exemption needs a pinned case it must still REJECT.** A rule that
+     can only return "clean" is not a rule; it is a gate that has stopped working and
+     is now reporting green. Every new exemption gets a negative control, and the
+     negative control is the one that matters.
+  2. **A per-line window cannot answer a whole-file question.** My first depth rule
+     read a 3-line window (correct for guards, which sit adjacent) and so always
+     concluded "top level" for a function whose brace was 80 lines up — the rule
+     silently never fired on the exact lines it was written for, and the suite was
+     green. Computing the state once per file and threading it in is not an
+     optimisation; it is the difference between the rule existing and not existing.
+
+## "That file is clean" and "the gate never looked at that file" print the same thing (2026-09-27)
+A mesh reported 3 findings in `lib/module-count-drift.mjs` at lines 252/271/293, all
+`treeRatio.toFixed(...)`. The live audit reported **zero** findings in that file. Before
+concluding the mesh was wrong, I planted the exact shape it described — a bare
+`.toFixed` on a possibly-null ratio — into the real file and re-ran the audit:
+
+    nullable-numeric-format :139 — treeRatio can be null here and .toFixed() is unguarded
+
+The gate saw it immediately. So its silence was a TRUE clean, not a blind spot, and the
+file was restored byte-for-byte. **Silence from a source-scanning gate is only evidence
+after you have seen that gate catch the thing.** One plant-and-rerun (two minutes)
+converts "it says clean" into "it can see this class, and this file is clean".
+
+The mesh's three sites were already `ratioDetail(v, digits)` — the fix I had made for
+precisely this class — and the quoted line numbers pointed at unrelated lines. A quoted
+finding with a line number is still a claim about a *specific run*.
+
+## The roster a gate prints in prose is only as fresh as the run that produced it
+The same mesh listed 9 files for the audit's "argv[1].endsWith(...) guard" note. The live
+note says **7 branches in 9 files** but names none of them. Reading the roster out of the
+audit's own `--json` (`_work/argv-only-roster.mjs`) showed only **2 of the 9** were on it,
+while 5 live files were missing from the quote — including `update-watch-check.mjs` (mine)
+and `lib/claims-gate.mjs` (imported twice by self-check).
+
+Do not reconstruct a gate's roster by grepping for the token in its message. I did, found
+ZERO, and nearly reported the gate as broken. The note reports a per-file *tier*
+(`tiers.filenameOnly`) — a classification of a BRANCH, not a text search for `endsWith`.
+`node lib/main-only-audit.mjs --json` prints the report and THEN exits 1, so
+`execFileSync` throws with the JSON already complete on `err.stdout`; treating that as a
+harness failure is the second way to get this wrong.
+
+## A probe with no positive control reports "safe" for every file in the repo
+Testing whether the argv-only files leak into a self-check importer, my first probe said
+LEAK for all six. It was wrong twice over:
+  1. `node -e "…" --selftest` sends the flag to **NODE**, not `process.argv` — node answers
+     "bad option", which is a broken probe wearing the costume of a leak.
+  2. A bare absolute path on Windows has scheme `c:`, and the ESM loader rejects it with
+     ERR_UNSUPPORTED_ESM_URL_SCHEME — a probe failure that reads like a crash in the file
+     under test.
+Both produced confident wrong answers. The probe needs a **file** (argv pushed BEFORE the
+dynamic import, target as a `file://` URL) and a **positive control** — a module that prints
+then `process.exit(0)` — or its "safe" verdicts are indistinguishable from having no probe.
+Result once fixed: all 11 files safe, guard effective in both directions (importer-safe AND
+still runs standalone).
+
+## Closing a "known blind spot" is three bugs wearing one trench coat (2026-09-27)
+`lab/import-guard/detector.mjs` documented a permanent blind spot: a backtick span ran
+to the next backtick, so `${…}` was swallowed as string and a self-execution site
+written inside an interpolation was invisible. The header said the direction was safe
+(a missed site is one line of defence). It was safe about the FALSE POSITIVE and
+exactly wrong about the FALSE NEGATIVE, and this gate's job is the false negative.
+
+**The blind spot was reachable.** A module whose body is `const label = \`gate:
+${run()}\`` where `run()` exits on `--selftest` really does self-execute on import.
+Proven by driving the shape through a real importer, not by reading it.
+
+Three bugs, in order, each looking like the fix:
+1. **Cleared `quote` but not `state.inTemplate`.** The backtick branch had set
+   `inTemplate = true`; clearing only `quote` left it set, so every character after
+   `${` fell into the cross-line template block and hit its bare `continue`, freezing
+   `out` at `${`. Found by LOGGING `out` at the top of the loop — after reading the
+   code four times, each time concluding "looks right".
+2. **Kept the depth counter per-line.** A `${JSON.stringify(\n foo \n)}` spanning
+   lines left the `}` at its end looking like a fresh interpolation, re-opening an
+   already-open template and latching `inTemplate` true FOR THE REST OF THE FILE. The
+   damage was not a missed warning: it made a baselined PROTECTED file
+   (`lab/pane-diff/role-scan.mjs`) report CLEAN, and the gate then told the operator
+   to **delete that file's baseline entry as stale** — an exemption removed on the
+   strength of a scanner bug. Found by asking why a protected file had become clean.
+3. **Widened an exemption to cover the case in front of me.** "Is there a call before
+   the span?" also excused `const FLAG = '--selftest'`, which a long-standing control
+   pins as a LEAK. The control caught it. Narrowed to the ternary-selection shape.
+
+Two general rules:
+  - **A cross-line construct needs cross-line state.** A depth counter re-seeded to
+    zero each line is not a counter, it is a guess — and the failure is a scanner that
+    is *more* confident than before, which is worse than the bug it replaced.
+  - **"This file is now clean, prune its exemption" is a DANGEROUS message**, and a
+    gate that emits it must be trusted more than usual, not less. Any scanner change
+    that makes a baselined entry go stale should be treated as a finding about the
+    CHANGE until the file is read by hand. It was, and the file had not been fixed.
+
+Corollary on the state itself: the first fix for #1 was found by instrumenting `out`
+at the top of the loop, after four readings of the diff all said the handler was
+correct. **When a fix that looks right changes nothing, log the value at the boundary
+rather than reading the code again** — a reader confirms what it expects.
+
+## One flag, two formats: a reader cannot tell "nothing happened" from "never JSON" (2026-09-27)
+`lib/loopback-probe.mjs --trace=FILE` meant two different things. Loop mode appended
+`JSON.stringify(sample)`; single-shot appended the formatted verdict LINE. Same flag,
+same filename convention, two formats — so a file's format depended on how it was
+invoked, and a consumer had to know the invocation to parse it.
+
+The reason it survived is worth stating, because it is the general shape:
+**a reader that maps-and-filters turns "malformed" into "absent."** The lib's
+`readTrace` does `map(parse → null on failure)` then `.filter(Boolean)`, so a
+TEXT trace reads as an EMPTY trace — not as a wrong one. A text trace and a
+missing file are indistinguishable to it. Both of my teeth controls failed until
+I noticed my own harness had the same reader minus the `.filter(Boolean)`, and
+was therefore counting a malformed line as a row: asserting the opposite of the
+truth. If your harness reimplements the reader, copy the reader's *error
+handling*, not just its parse call.
+
+Fix: one exported `traceRecord({ mode, sample, verdictLine })` and one
+`writeTraceLine(file, record)`, used by both modes. Three decisions make it a
+shared format rather than a lowest common denominator:
+  - `mode` is IN the record, so a consumer never infers it from the filename.
+  - loop-only fields (`seq`, `windowOpen`, `windows`) are **present-and-null** in a
+    once-record. Absent and null are different answers, and JSON.stringify drops
+    `undefined` — so a dropped key is literally a different schema, which is the
+    failure the change set out to remove. Pinned by round-tripping through JSON.
+  - the human `line` became a FIELD rather than the file's format, so stdout is
+    byte-identical (the guide documents that output) and a grep for the verdict
+    still works.
+
+General rule: **a flag whose output format varies by mode is a schema with no
+schema.** Fix the format; do not document the difference — a reader that silently
+reads the wrong file as empty will not read the documentation either.
+
+Two harness lessons from the same control:
+  - It passed `--trace FILE` and the parser takes `--trace=FILE` and `--loop`;
+    the child exited 0, wrote nothing, and every assertion failed on `rows=0`.
+    **A control that drives a CLI must use the CLI's documented spelling, and a
+    flag the parser does not recognise should be a refusal, not a shrug.** (That
+    refusal is a real, separate gap in this file — recorded, not fixed here.)
+  - `{ ...r, seq: undefined }` does NOT model a dropped key: spreading keeps the
+    key and `Object.keys` still lists it. The drop happens in `JSON.stringify`,
+    so the model has to go through JSON.
+- [2026-09-27] MULTI-LANE "STILL OPEN" LISTS ARE SNAPSHOTS, NOT STATE: three lanes in one day re-reported closed items (the pool lane's "3 unrunnable", the docs lane's cross-check findings AND its two class-4s, flagged 3x as still-unfixed a flake that was already fixed at the writer with a measured comment). A peer lane's turn starts before the fixes land and drains after; the backlog replays its snapshot on every drain. Before correcting a peer or closing their finding, date-stamp the evidence — wall log mtimes, thread queue position+pause state — and diff their claim against it. Timestamps resolved in seconds what a re-argument would have burned a turn on. Ack with evidence, not with arguments.
+- [2026-09-27] A DRAMATIC RESULT DESERVES A CHECK OF THE INSTRUMENT FIRST: three same-day harness bugs almost inverted verdicts — a hijack probe whose subject called the controls itself (shouted HIJACKED while the guard held), auditFile defaulting a missing src to the empty string ("no findings" for every file), and a wrong first-draft detail extractor (picked the stack frame, dropped the Error). Tell: when a result is surprising in the direction that makes you look good (subject broken) OR bad (my fix inverted), re-run against a fixture you can hand-verify before believing it. The instrument is guilty until the fixture proves it innocent.
+- [2026-09-27] A PHANTOM DEFECT ATTRACTS A SECOND FIX: two lanes independently proposed the same mechanical "repair" (round/loosen exact float mtime equality, or re-seed the cache after utimesSync) for a defect that did not exist — the pattern looked wrong without the round-trip measurement (2007 values, 0 lossy; stat-vs-stat is exact by construction), and either change would have shipped a stale-hash cache hit on exactly the same-size same-second edit the key exists to catch. When a "fix" targets an INVARIANT, measure whether the invariant is real before touching it, and write the resolution into the ledger where the phantom was filed — the original handback entry still invites a third fixer if nobody closes the loop in place.
+- [2026-09-27] THREE FIXTURE FAULTS IN A ROW, LIB RIGHT EVERY TIME (listen-retry selftest): a setTimeout stub that SWALLOWED the callback made 'each retry re-listens' unassertable — an assertion that cannot see the thing cannot fail on its absence, so make stubs invoke, not discard; a `maxMs: 0` budget fired in the same millisecond as t0 fails a `> maxMs` guard by TIMING, not contract — a negative budget is the honest "deadline long past"; and control ORDER matters when the contract reads a module global — the give-up control set gaveUpBinding=true and the reporting control behind it asserted false against the poisoned value, proving nothing. Same-ms Date.now() collisions are the NORM on this box, never assume a control has outrun the clock.
+- [2026-09-27] THE INSTRUMENT WAS TESTED ON THE ONLY LINE ENDING THE REPO DOES NOT USE: main-only-audit's guard-alias map split on '\n', so every CRLF line kept a trailing \r that `.` cannot match and non-m `$` cannot span — the map came back EMPTY for every file in the tree and two correctly-guarded files were reported as defects. Every existing control built its fixture with \n, so the gate had only ever been tested on the ending this repo does not use. Fix at the writer (split(/\r?\n/)) + a NEGATIVE control (a genuinely unguarded branch in a CRLF file must STILL fire, or the fix disarms the tier). When a matcher is line-oriented, its fixtures must include the repo's actual line ending.
+- [2026-09-27] A CLAIM RECORD MUST NOT BE A FUNCTION OF WHERE THE CLAIM IS PRINTED: `npm install` appears at five RUNBOOK lines as one claim id; lockOf took the LAST occurrence, so the record read ok because a verifying line happened to come after the one that could not (skip@2284). Records now aggregate over a total order least- to most-damning (ok < skip < fail): an absence is never recorded as a success, a real red is never masked by the other occurrences' health. Any per-claim record keyed across repeated text needs a declared aggregation, not last-write-wins.
+- [2026-09-27] SILENT MUTATION UNDER ANOTHER NAME: a mutated copy named _g.mjs exited 0 in silence because the gate's MAIN guard was argv[1].endsWith('claims-gate.mjs') — a copy under another name runs nothing and reports success, so the mutation "passed". Mutate IN PLACE with a restore trap. And on a shared tree with 28 foreign node.exe, checksum what you edit: a lane found npm-install output spliced into the middle of a comment in lib/runbook-claims.mjs; repaired exactly, writer unidentified — the claims registry should record the sha a claim holder left the file at, so release detects foreign edits (proposed, not yet built).
+- [2026-09-27] APPENDING A SELFTEST BRANCH DOES NOT DISARM THE EXISTING MAIN GUARD: adding the standard branch at the file tail left the original bare-run guard firing FIRST on --selftest — which ran live main() (a real state scan) instead of the controls. When a file already has a bare-run MAIN block, the new --selftest branch needs the old guard to EXCLUDE the flag, and the fixture must prove the flag reaches the controls. And a fixture's "settled canonical" must satisfy the real predicate's full contract (status done/transferred AND rounds>=3) — a plausible-looking status that the predicate rightly rejects scans zero families and every positive control "passes" vacuously in the negative direction.
+- [2026-09-27] FOUR SUITES, ONE RED SHAPE, NOT ALWAYS ONE BUG: a wall reported watchdog FAIL (expected refused, saw timeout) and it read as the loopback-probe contention class — fourth "witness". Traced: watchdog's OWN portBound fixture races a 1ms fake-error against a 5ms unref'd budget, and under pool starvation the timeout wins the settled race. Same SYMPTOM (a control failing on contention), different FILE and MECHANISM (separate pre-probe implementation, launcher decision probe). Before folding flaky controls into one class fix, trace at least one witness to its actual line — a shared symptom family can hide several real bugs, and fixing only the famous one leaves the rest. Fixture rule that falls out: make fake sockets fire SYNCHRONOUSLY inside connect() (no timer race at all), or keep fire-delay and budget in different orders of magnitude.
+- [2026-09-27] THE tasklist /FI MANGLE IS A BASH-SHELL RULE, NOT A NODE RULE — PRECISION BEFORE A SWEEP: Git Bash rewrites `/FI` into a path, so INTERACTIVE `tasklist /FI` returns nothing (silently — no error). But node's spawnSync('tasklist', ['/FI', ...]) is UNAFFECTED: measured 45-char stdout with the pid row on single-slash, while double-slash //FI from node returns 0 bytes. A lane's broadcast of the //NH workaround would have broken self-check.mjs:498 (the supervisor pid-liveness gate) if applied to node call sites. Before broadcasting a "this call is broken" rule, reproduce it in the caller's own context — shell idiom and child-process argv are different layers, and the fix for one is the bug for the other.
+- [2026-09-27] A STATUS LINE COPIED FROM AN EARLIER REPORT IS AN UNMEASURED CLAIM — OWNED BY THE CARRIER, NOT THE WRITER: one lane carried "rate-degradation still unrunnable" through EIGHT-PLUS deliveries after it was fixed, each report re-citing the line; the correcting lane's own rule (re-run the thing before repeating the line — one command) is the operational fix. The structural half stands too: lib/ is untracked, so no two lanes can see each other's state — a claims ledger that records the FILE'S GATE RESULT at claim time (not just who holds it) would make "is it still true?" answerable without a rerun. And the correction itself is worth what it cost: the carrier who finds their own stale line and says so in public, with the count of affected deliveries, is the reason multi-lane trees stay trustworthy.

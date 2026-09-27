@@ -14,16 +14,18 @@ description: >
   any coding agent harness (Codebuff, Claude Code, Cursor, Codex, Gemini).
   Use when the user says /queue-brain, "queue mode", "brain queue", "backlog
   mode", or wants prompts collected, prioritized, and organized first.
-argument-hint: "[on|off|go|auto|review]"
+argument-hint: "[on|off|go|auto|review|stop]"
 license: MIT
 metadata:
   author: neoOpus
-  version: "1.1.0"
+  version: "1.2.0"
   repository: https://github.com/neoOpus/agent-skills
   homepage: https://www.skills.sh/neoopus/agent-skills/queue-brain
 ---
 
 # Queue Brain
+
+#knowledge-management #task-management #priority-routing #verification
 
 You are a queue, not a reflex. Incoming prompts are **inventory**, not commands.
 Work happens deliberately, from the list, one entry at a time, with verification
@@ -50,6 +52,11 @@ Modes:
 - **auto** — enqueue + execute top entry each turn until the user interrupts.
 - **review** — output the current ranked list with priorities, dependencies, and
   staleness flags. No work.
+- **stop / batch (register-only)** — every prompt is REGISTERED ONLY: one entry
+  written as outcome + tags, acknowledged in one line, nothing executes. On the
+  batch keyword (`STOP!`), run one batched DEDUPE + reality-pass + RE-RANK over
+  everything and deliver a single clean ranked todolist. Built for users who
+  fire many prompts in a row and want one adjudicated plan.
 
 ## The loop (every turn, in order)
 
@@ -64,6 +71,11 @@ Modes:
    "verify in an hour") are `#timed` — they rot fast and must NOT sit ranked
    above live work; and **duplicates arrive as rephrasings** ("make it faster"
    twice in different words) — dedupe by intent, not wording.
+   When a new prompt smells like an existing entry, register it anyway but
+   attach a **dedupe flag** naming the merge candidate and what is genuinely
+   new ("dedupe flag: this is #12's outcome plus a watch leg — merge, keep the
+   watch leg"). Resolution defers to the batch/DEDUPE pass; the flag makes it
+   a one-line merge later instead of a re-read of everything.
 2. **DEDUPE — against the list AND against reality.** Textual pass first:
    exact duplicate → merge, keep the sharper wording; overlapping → merge into
    one entry carrying the union of intent; a prompt that *corrects* an entry
@@ -92,6 +104,12 @@ Modes:
      (investigation before arming, extraction before its consumers).
    - **Cheap unblocking:** a `#quick` that unblocks a big entry outranks the
      big entry itself.
+   - **Adjacency without merging:** same-surface entries run adjacently and
+     share one scan/sweep, but stay separate entries — each keeps its own
+     verification and evidence (merging hides per-tool proof).
+   - **Run collapse:** N variants of "run the suite to green" become ONE run
+     whose checklist names every predecessor's proof — one capture wall serves
+     all claimants; five full runs are four wasted walls.
 4. **VERIFY-BACK.** The most recently completed entry gets one re-verification
    glance each turn: still passing? Did a newer change break it? A regression
    found here becomes the new top entry. (Cheap insurance; catches cascade
@@ -128,6 +146,64 @@ An entry is DONE only when:
 Quality beats throughput: if done-right needs a refactor the entry didn't
 plan for, either extend the entry explicitly or split it — never ship the
 shallow version silently.
+
+## Promoted rules (recurring classes, distilled from lessons.md)
+
+Promoted after they kept recurring across projects in the working set. Each
+one cost real time before it was written down.
+
+1. **A readout must not be able to lie quietly.** A metric that can degrade to
+   a plausible constant (a regex miss falling back to "1 errors"), a tool that
+   writes an all-zero report when its input tree is missing, a counter that
+   only rises — all read as health while lying. Count the things themselves,
+   never a summary string; refuse non-empty input on a missing tree; verify a
+   report's own counters, not just its exit code. When one counter is found
+   wrong, grep every reader of it before calling the class fixed — the same
+   wrong axis survives in a second readout more often than not, and the
+   reporter is where it hurts most.
+2. **A positive control must fail for the right reason, through the right
+   layer.** A control that passes because a *different* guard caught the bug
+   proves nothing — disable the mechanism under test, not its neighbors. Drive
+   both the old and the new rule over recorded history so the fixture
+   reproduces the real failure, and assert on the surface that failed in
+   production, not on the fix's return value.
+3. **Machine-local state: `present + wrong = FAIL`, `absent = skip`.** A check
+   that FAILs for absent input (state files, gitignored artifacts, machine-only
+   caches) is a red card nobody can act on — and it is how people learn to
+   ignore gates. Same class: a metric keyed on a gitignored build artifact is
+   machine-dependent, so the gate lies on any other checkout; derive it from
+   source, and let a missing surface say `skip` with the command that produces
+   the input.
+4. **Gate budgets are measured, not guessed — and a timeout is not a verdict.**
+   A timeout is a FAIL whose cause is the machine, not the subject. Budget
+   per-file passes from the file count, measure the loaded number (it is the
+   one the nightly will actually see), prefer a bigger cap + visible duration
+   to weakening the check, and report an overrun as `unverified` — escalating
+   to FAIL only when the same gate overruns on consecutive runs. Never "fix" a
+   slow-but-correct check by weakening it.
+5. **Never sleep-poll a long job; the machine parallelizes fine.** Launch
+   detached with a log file, start the next entry immediately, and read the
+   log as a side effect of the next command. A wait is justified only when the
+   NEXT step needs the result — and then it must ride inside a command that
+   also does useful work.
+6. **Fix the class, not the site.** A wrong pattern found once (a wrong
+   progress axis, an unguarded generator overwriting shared output, a torn-file
+   parse, a counter reading only one status) is a sweep instruction, not a
+   one-line fix. And fix data contracts at the WRITER, verified against the
+   output — a reader-side default that infers a missing field schedules wrong
+   work forever the moment a new producer appears.
+7. **Rank every suggestion against the user's stated goal, and say which ones
+   the goal rejects.** A suggested idea is not an accepted one: tag queue
+   entries with the goal they serve, mark off-goal work `postponed`, and   open each session by re-reading the goal, not the queue.
+8. **Shared-state mutations go through surgery, not ad-hoc writes.** Any tool
+   that rewrites statuses in a shared queue/state file snapshots the
+   before-state, mutates under the file lock, writes atomically, and journals
+   one line per CHANGED entry ({at, reason, before, after}) — an audit trail
+   any tool can replay (reference implementation: queueSurgery(), sider-clone
+   60-tools/lib/queue.mjs). Dry-run = a counting pass that mutates nothing;
+   after the real run the journal's changed-count must equal the tool's
+   claimed count (the lying-readout rule applied to mutation tools). Hand-rolled
+   status rewrites were the class that destroyed records.
 
 ## Lessons (the self-improving part)
 
