@@ -18,7 +18,7 @@ argument-hint: "[on|off|go|auto|review|stop]"
 license: MIT
 metadata:
   author: neoOpus
-  version: "1.3.0"
+  version: "1.3.1"
   repository: https://github.com/neoOpus/agent-skills
   homepage: https://www.skills.sh/neoopus/agent-skills/queue-brain
 ---
