@@ -7,7 +7,14 @@ get rewritten into SKILL.md rules; everything here stays terse (1–2 lines).
 
 ## Working set
 
-<!-- publish trigger: last suggested at 186 · reset after running publish-queue-brain.mjs -->
+<!-- publish trigger: last suggested at 189 · reset after running publish-queue-brain.mjs -->
+
+## 2026-09-27 — publish-flow lessons (v1.3.0 ship)
+
+- 2026-09-27 · sider-clone · **Committing an untracked directory bypasses per-file path discipline**: `git add <dir>` shipped 4 `__pycache__/*.pyc` bytecode files to a public repo because the ignore class didn't exist yet. The ignore class ships BEFORE the first add, not after the first incident — an explicit-path list can't protect what it doesn't enumerate.
+- 2026-09-27 · sider-clone · **A version field that lives in N places needs one writer**: metadata.json said 1.3.0 while the shipped SKILL.md frontmatter still said 1.2.0 — two versions of truth in one package. Fix at the writer: the publish script now bumps frontmatter and metadata in lockstep, and the dry-run proves the delta.
+- 2026-09-27 · sider-clone · **A quiet push hides its own receipt**: `-q` on `git push` suppressed the confirmation, and the next push range made my own commit look like an interloper's. Match the commit message before diagnosing a foreign pusher; suspect the instrument (a silent flag) before the world.
+- 2026-09-27 · sider-clone · **A resolution must be attached to the thing it resolves**: the phantom handback's RESOLVED pointer was appended at the ledger tail but reported as "appended to :160" — the intent's line number, not the bytes' landing site. An append-only file grows at the tail; only a line-anchored insert puts the closure where a sweeping reader will meet the invitation. Verify the landing site of any "appended at :N" claim before reporting it.
 
 - 2026-09-23 · sider-clone · DRY-RUN MUST BE THE TOOL'S OWN MODE: queueSurgery always rewrote the queue, so a "I only counted" callback leaked its in-memory mutations to disk — added dryRun:true (full read+mutate+diff cycle, never writes queue or journal; proved byte-identical under deliberate dirtying). A dry-run simulated by a careful caller over an always-writing tool is a real run waiting for a careless callback.
 - 2026-09-13 · all · SESSION START: re-read ~/.agents/skills/queue-brain/lessons.md before the first re-rank — cross-harness lessons only load if the file is actually read (SKILL.md rule added 09-13 after the junction setup made sharing possible but not automatic)

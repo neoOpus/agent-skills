@@ -204,6 +204,26 @@ one cost real time before it was written down.
    after the real run the journal's changed-count must equal the tool's
    claimed count (the lying-readout rule applied to mutation tools). Hand-rolled
    status rewrites were the class that destroyed records.
+9. **On a shared tree, attribute against a per-actor baseline or stay silent.**
+   Claim before editing, and record BOTH the file's sha at claim and the sha left
+   at release — that pair is the only thing that makes a foreign edit detectable
+   at all (on a box with 28 foreign node.exe, one lane found npm-install output
+   spliced into the middle of a comment in `lib/runbook-claims.mjs`; repaired
+   exactly, writer never identified). But a moved sha is evidence of a FOREIGN
+   edit only when the actor differs: compare against THIS lane's own last release
+   of THIS file, in time order, or the ordinary claim→edit→release→claim loop is
+   reported as a collision. Measured on a live registry: 6 of 6 recorded
+   "unclaimed edit" incidents were same-lane continuations and ZERO were foreign,
+   so the dashboard card built to make foreign edits visible was crying wolf at
+   its own author. Downgrade such a record, never delete it — keep file, holder
+   and sha pair under its own kind, so a human can still judge it.
+   Two corollaries with the same shape: an ABSENCE claim ("no `--selftest`
+   branch", "nothing imports it") needs a live probe, not a grep — the absence
+   report named two suites that run 24/24 and 30/30 green in ~1s, misread because
+   the detector could not see argv aliased through a slice — and a status line
+   copied from an earlier report is an unmeasured claim, so the lane repeating it
+   owns re-running it. Record the gate result AT CLAIM time for the same reason:
+   so "is it still true?" is answerable without a rerun.
 
 ## Lessons (the self-improving part)
 
